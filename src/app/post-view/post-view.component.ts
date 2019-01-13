@@ -1,19 +1,20 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component,  OnDestroy, OnInit } from '@angular/core';
 import { PostsService } from '../services/post.service';
 import { Post } from '../model/post.model';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-post-list',
-  templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.scss']
+  selector: 'app-post-view',
+  templateUrl: './post-view.component.html',
+  styleUrls: ['./post-view.component.scss']
 })
-export class PostListComponent implements OnInit, OnDestroy {
+export class PostViewComponent implements OnInit, OnDestroy {
 
-  @Input() posts: Post[];
+  posts: Post[];
   postsSubscription: Subscription;
 
-  constructor(private postService: PostsService) { }
+  constructor(private postService: PostsService, private router: Router) { }
 
   ngOnInit() {
     this.postsSubscription = this.postService.postSubject.subscribe(
@@ -22,6 +23,10 @@ export class PostListComponent implements OnInit, OnDestroy {
       }
     );
     this.postService.emitPosts();
+  }
+
+  onNewPost() {
+    this.router.navigate(['/posts', 'new']);
   }
 
   ngOnDestroy() {
